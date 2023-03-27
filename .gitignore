@@ -9,6 +9,10 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+.env
+DockerFile
+docker-compose.yml
+.dockerignore
 
 # macOS
 .DS_Store
