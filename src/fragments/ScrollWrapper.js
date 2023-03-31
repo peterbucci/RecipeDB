@@ -1,9 +1,15 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Menu from "../assets/icons/Menu";
 import ChefsHat from "../assets/icons/ChefsHat";
 import Constants from "expo-constants";
 
-export default function ScrollViewWrapper({ children }) {
+export default function ScrollViewWrapper({ children, navigation }) {
   return (
     <ScrollView
       style={styles.container}
@@ -13,12 +19,14 @@ export default function ScrollViewWrapper({ children }) {
       <View>
         <View style={styles.header}>
           <Menu style={styles.menuIcon} />
-          <View style={styles.logo}>
-            <ChefsHat style={styles.logoIcon} />
-            <Text style={styles.logoText}>
-              recipe<Text style={styles.logoTextTwo}>db</Text>
-            </Text>
-          </View>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("Home")}>
+            <View style={{ ...styles.logo, ...styles.logoHeader }}>
+              <ChefsHat style={styles.logoIcon} />
+              <Text style={styles.logoText}>
+                recipe<Text style={styles.logoTextTwo}>db</Text>
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
       </View>
       {children}
@@ -57,8 +65,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 50,
+    marginRight: 10,
     marginLeft: 10,
+    cursor: "pointer",
+  },
+  logoHeader: {
+    marginRight: 50,
   },
   logoText: {
     color: "#ffffff",

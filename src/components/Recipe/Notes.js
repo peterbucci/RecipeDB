@@ -2,7 +2,6 @@ import { Text, View } from "react-native";
 import { styles } from "./styles/notes";
 
 export default function Notes({ notes }) {
-  console.log(notes);
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Notes</Text>

@@ -11,15 +11,9 @@ export const styles = StyleSheet.create({
   },
   item: {
     marginTop: 20,
-    padding: 20,
-    backgroundColor: "#40513B",
-    borderRadius: 10,
   },
   itemNoMargin: {
     marginTop: 0,
   },
-  details: {
-    marginTop: 10,
-    color: "#ffffff",
-  },
+  details: {},
 });

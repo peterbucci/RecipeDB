@@ -3,6 +3,7 @@ import RecipeLayout from "~/components/Recipe/";
 import ScrollViewWrapper from "~/fragments/ScrollWrapper";
 import DropdownComponent from "~/fragments/DropdownMenu";
 import Spinner from "~/fragments/Spinner";
+import { getRecipe } from "../../api/recipe.api";
 
 const menuData = [
   { label: "Photo", value: "1" },
@@ -13,18 +14,7 @@ const menuData = [
   { label: "Conversation", value: "6" },
 ];
 
-const getData = async (recipeId) => {
-  try {
-    let res = await fetch(`http://192.168.1.165:3000/recipe/${recipeId}`, {
-      method: "GET",
-    });
-    return await res.json();
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-export default function Recipe({ route }) {
+export default function Recipe({ route, navigation }) {
   const [fetching, setFetching] = useState(true);
   const [recipe, setRecipe] = useState(null);
   const [featuredImage, setFeaturedImage] = useState(null);
@@ -46,14 +36,14 @@ export default function Recipe({ route }) {
   }, [recipe]);
 
   useEffect(() => {
-    getData(recipeId).then((res) => {
+    getRecipe(recipeId).then((res) => {
       setRecipe(res);
       setFetching(false);
     });
   }, []);
 
   return (
-    <ScrollViewWrapper>
+    <ScrollViewWrapper navigation={navigation}>
       {fetching ? (
         <Spinner />
       ) : recipe.id ? (
@@ -67,7 +57,7 @@ export default function Recipe({ route }) {
             <RecipeLayout.Photo {...featuredImage} />
           )}
           {visibleSections.indexOf("2") >= 0 && (
-            <RecipeLayout.Description text={recipe.description} />
+            <RecipeLayout.Description description={recipe.description} />
           )}
           {visibleSections.indexOf("3") >= 0 && (
             <RecipeLayout.Ingredients ingredients={recipe.ingredients} />

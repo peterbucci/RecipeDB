@@ -9,11 +9,7 @@ export const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
   },
-  list: {
-    padding: 20,
-    backgroundColor: "#40513B",
-    borderRadius: 10,
-  },
+  list: {},
   item: {
     flexDirection: "row",
     marginTop: 15,
@@ -23,6 +19,5 @@ export const styles = StyleSheet.create({
   },
   itemText: {
     marginRight: 5,
-    color: "#ffffff",
   },
 });
