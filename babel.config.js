@@ -10,6 +10,8 @@ module.exports = function (api) {
           rootPathSuffix: "src",
         },
       ],
+      "@babel/plugin-proposal-export-namespace-from",
+      "react-native-reanimated/plugin",
     ],
   };
 };

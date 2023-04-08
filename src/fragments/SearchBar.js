@@ -17,10 +17,14 @@ export default function SearchBarComponent() {
       searchIcon={{ color: "#000000" }}
       clearIcon={{ color: "#000000" }}
       containerStyle={{
-        backgroundColor: "#EDF1D6",
-        borderBottomColor: "#dddddd",
+        flex: 1,
+        marginHorizontal: 10,
+        backgroundColor: "none",
+        borderBottomWidth: 0,
+        borderTopWidth: 0,
       }}
       inputContainerStyle={{
+        height: 35,
         backgroundColor: "#ffffff",
       }}
       inputStyle={{

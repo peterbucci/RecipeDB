@@ -30,9 +30,7 @@ export default function Recipe({ route, navigation }) {
 
   useEffect(() => {
     if (!recipe) return;
-    setFeaturedImage(
-      recipe.images.find(({ id }) => id === recipe.featuredImageId)
-    );
+    setFeaturedImage(recipe.images.find(({ featured }) => featured));
   }, [recipe]);
 
   useEffect(() => {
@@ -46,7 +44,7 @@ export default function Recipe({ route, navigation }) {
     <ScrollViewWrapper navigation={navigation}>
       {fetching ? (
         <Spinner />
-      ) : recipe.id ? (
+      ) : recipe?.id ? (
         <RecipeLayout recipe={recipe}>
           <DropdownComponent
             data={menuData}

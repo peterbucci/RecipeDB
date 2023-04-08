@@ -6,31 +6,27 @@ import {
   TouchableWithoutFeedback,
   Image,
 } from "react-native";
-import { getRecipeList } from "../api/recipe.api";
+import { getRecipeCount, getRecipeList } from "../api/recipe.api";
 import ScrollViewWrapper from "../fragments/ScrollWrapper";
 import SearchBarComponent from "../fragments/SearchBar";
 
 export default function Home({ navigation }) {
   const [recipes, setRecipes] = useState(null);
+  const [recipeCount, setRecipeCount] = useState(null);
+  const [page, setPage] = useState(0);
+
   useEffect(() => {
-    getRecipeList(0, 10).then((res) => {
+    getRecipeCount().then((res) => {
+      setRecipeCount(res.count);
+    });
+    getRecipeList(page * 10, 10).then((res) => {
       setRecipes(res);
     });
-  }, []);
+  }, [page]);
 
   return (
     <ScrollViewWrapper navigation={navigation}>
-      <SearchBarComponent />
       <View style={styles.container}>
-        <View style={{ alignItems: "center", marginTop: 10 }}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.navigate("AddARecipe");
-            }}
-          >
-            <Text>Add A Recipe</Text>
-          </TouchableWithoutFeedback>
-        </View>
         {recipes &&
           recipes.map((recipe) => {
             const description = recipe.description
@@ -40,7 +36,14 @@ export default function Home({ navigation }) {
             return (
               <View key={recipe.id} style={styles.item}>
                 {recipe.source && (
-                  <Image source={{ uri: recipe.source }} style={styles.image} />
+                  <Image
+                    source={{
+                      uri:
+                        "http://192.168.1.151:3000/uploads/images/" +
+                        recipe.source,
+                    }}
+                    style={styles.image}
+                  />
                 )}
                 <View style={styles.itemRight}>
                   <Text>Recipes</Text>
@@ -58,6 +61,36 @@ export default function Home({ navigation }) {
               </View>
             );
           })}
+        {recipeCount && (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              flexDirection: "row",
+              margin: 10,
+            }}
+          >
+            {page !== 0 && (
+              <Text
+                style={{ ...styles.paginationText, marginRight: 5 }}
+                onPress={() => setPage(page - 1)}
+              >
+                Previous
+              </Text>
+            )}
+            <Text style={styles.paginationText}>
+              {page + 1} of {Math.ceil(recipeCount / 10)}
+            </Text>
+            {page !== Math.ceil(recipeCount / 10) - 1 && (
+              <Text
+                style={{ ...styles.paginationText, marginLeft: 5 }}
+                onPress={() => setPage(page + 1)}
+              >
+                Next
+              </Text>
+            )}
+          </View>
+        )}
       </View>
     </ScrollViewWrapper>
   );

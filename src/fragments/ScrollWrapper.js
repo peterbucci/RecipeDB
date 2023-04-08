@@ -1,42 +1,19 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableWithoutFeedback,
-} from "react-native";
-import Menu from "../assets/icons/Menu";
-import ChefsHat from "../assets/icons/ChefsHat";
+import { ScrollView, StyleSheet, View } from "react-native";
 import Constants from "expo-constants";
+import Header from "./Header";
+import Logo from "./Logo";
+import { useState } from "react";
+import Menu from "./Menu";
 
 export default function ScrollViewWrapper({ children, navigation }) {
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={{ flexGrow: 1 }}
-      stickyHeaderIndices={[0]}
     >
-      <View>
-        <View style={styles.header}>
-          <Menu style={styles.menuIcon} />
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("Home")}>
-            <View style={{ ...styles.logo, ...styles.logoHeader }}>
-              <ChefsHat style={styles.logoIcon} />
-              <Text style={styles.logoText}>
-                recipe<Text style={styles.logoTextTwo}>db</Text>
-              </Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
       {children}
       <View style={styles.footer}>
-        <View style={styles.logo}>
-          <ChefsHat style={styles.logoIcon} />
-          <Text style={styles.logoText}>
-            recipe<Text style={styles.logoTextTwo}>db</Text>
-          </Text>
-        </View>
+        <Logo navigation={navigation} />
       </View>
     </ScrollView>
   );
@@ -44,47 +21,7 @@ export default function ScrollViewWrapper({ children, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Constants.statusBarHeight,
     flex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    height: 50,
-    backgroundColor: "#40513B",
-  },
-  menuIcon: {
-    marginLeft: 10,
-    width: 32,
-    height: 32,
-    color: "#ffffff",
-    cursor: "pointer",
-  },
-  logo: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 10,
-    marginLeft: 10,
-    cursor: "pointer",
-  },
-  logoHeader: {
-    marginRight: 50,
-  },
-  logoText: {
-    color: "#ffffff",
-    fontSize: 28,
-    fontFamily: "Noticia Text",
-  },
-  logoTextTwo: {
-    color: "#9DC08B",
-  },
-  logoIcon: {
-    marginRight: 1,
-    height: 30,
-    width: 30,
-    color: "#609966",
   },
   footer: {
     height: 100,
