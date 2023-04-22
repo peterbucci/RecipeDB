@@ -12,14 +12,19 @@ export default function Home({ navigation }) {
   const recipes = useSelector((state) => state.recipes);
 
   useEffect(() => {
-    async function fetchData() {
-      const recipeCountRes = await getRecipeCount();
-      setRecipeCount(recipeCountRes.count);
-      const recipeListRes = await getRecipeList(page * 10, 10);
-      recipeListRes.forEach((recipe) => dispatch(recipeAdded(recipe)));
-    }
+    const fetchData = async () => {
+      try {
+        const recipeCountRes = await getRecipeCount();
+        setRecipeCount(recipeCountRes.count);
+        const recipeListRes = await getRecipeList(page * 10, 10);
+        recipeListRes.forEach((recipe) => dispatch(recipeAdded(recipe)));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchData();
-  }, [page]);
+  }, [page, dispatch]);
 
   const handleRecipePress = (recipeId) => {
     navigation.navigate("Recipe", { recipeId });
@@ -27,8 +32,7 @@ export default function Home({ navigation }) {
 
   const renderRecipeItem = (recipe) => {
     const description = recipe.description.split(" ").splice(0, 10).join(" ");
-    const sourceUri =
-      "http://192.168.1.151:3000/uploads/images/" + recipe.source;
+    const sourceUri = `http://192.168.1.151:3000/uploads/images/${recipe.source}`;
 
     return (
       <RecipeList.Item
@@ -56,7 +60,7 @@ export default function Home({ navigation }) {
   return (
     <ScrollViewWrapper navigation={navigation}>
       <RecipeList>
-        {recipes && Object.values(recipes).map(renderRecipeItem)}
+        {Object.values(recipes).map(renderRecipeItem)}
         {recipeCount && renderPagination()}
       </RecipeList>
     </ScrollViewWrapper>
