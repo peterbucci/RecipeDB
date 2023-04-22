@@ -1,5 +1,5 @@
 import { registerRootComponent } from "expo";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -16,6 +16,9 @@ import Header from "./fragments/Header";
 import { useState } from "react";
 import Menu from "./fragments/Menu";
 import Constants from "expo-constants";
+
+import store from "./store";
+import { Provider } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
@@ -48,37 +51,43 @@ function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <SafeAreaProvider style={{ marginTop: Constants.statusBarHeight }}>
-      <Header navigation={navigationRef} setMenuActive={setMenuActive} />
-      <NavigationContainer
-        ref={navigationRef}
-        linking={linking}
-        fallback={<Text>Loading...</Text>}
-      >
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            headerShown: false,
-          }}
+    <Provider store={store}>
+      <SafeAreaProvider style={{ marginTop: Constants.statusBarHeight }}>
+        <Header navigation={navigationRef} setMenuActive={setMenuActive} />
+        <NavigationContainer
+          ref={navigationRef}
+          linking={linking}
+          fallback={<Text>Loading...</Text>}
         >
-          <Stack.Screen name="Home" component={Home} options={screenOptions} />
-          <Stack.Screen
-            name="Recipe"
-            component={Recipe}
-            options={screenOptions}
-          />
-          <Stack.Screen
-            name="AddARecipe"
-            component={AddARecipe}
-            options={screenOptions}
-          />
-        </Stack.Navigator>
-        <StatusBar style="auto" />
-      </NavigationContainer>
-      {menuActive && (
-        <Menu navigation={navigationRef} setActive={setMenuActive} />
-      )}
-    </SafeAreaProvider>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={screenOptions}
+            />
+            <Stack.Screen
+              name="Recipe"
+              component={Recipe}
+              options={screenOptions}
+            />
+            <Stack.Screen
+              name="AddARecipe"
+              component={AddARecipe}
+              options={screenOptions}
+            />
+          </Stack.Navigator>
+          <StatusBar style="auto" />
+        </NavigationContainer>
+        {menuActive && (
+          <Menu navigation={navigationRef} setActive={setMenuActive} />
+        )}
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 
