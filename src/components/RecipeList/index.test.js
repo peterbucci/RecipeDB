@@ -11,19 +11,18 @@ describe("RecipeList", () => {
   };
   const handleRecipePress = jest.fn();
 
-  const tree = renderer
-    .create(
-      <RecipeList>
-        <RecipeList.Item
-          recipe={recipe}
-          description={recipe.description}
-          handleRecipePress={handleRecipePress}
-        />
-      </RecipeList>
-    )
-    .toJSON();
-
   it("has 1 child", () => {
+    const tree = renderer
+      .create(
+        <RecipeList>
+          <RecipeList.Item
+            recipe={recipe}
+            description={recipe.description}
+            handleRecipePress={handleRecipePress}
+          />
+        </RecipeList>
+      )
+      .toJSON();
     expect(tree.children.length).toBe(1);
   });
 
@@ -40,5 +39,54 @@ describe("RecipeList", () => {
     const recipeItem = getByTestId("recipe-link");
     fireEvent.press(recipeItem);
     expect(handleRecipePress).toHaveBeenCalledWith(recipe.id);
+  });
+
+  it("should display the pagination correctly", () => {
+    const page = 1;
+    const totalPages = 5;
+    const setPage = jest.fn();
+    const { getByText, queryByTestId } = render(
+      <RecipeList.Pagination
+        page={page}
+        totalPages={totalPages}
+        setPage={setPage}
+      />
+    );
+    const paginationPrevious = queryByTestId("pagination-previous");
+    const paginationText = getByText(`${page + 1} of ${totalPages}`);
+    const paginationNext = queryByTestId("pagination-next");
+    expect(paginationPrevious).toBeTruthy();
+    expect(paginationText).toBeTruthy();
+    expect(paginationNext).toBeTruthy();
+  });
+
+  it("should not display the previous button if page equals 0", () => {
+    const page = 0;
+    const totalPages = 5;
+    const setPage = jest.fn();
+    const { queryByTestId } = render(
+      <RecipeList.Pagination
+        page={page}
+        totalPages={totalPages}
+        setPage={setPage}
+      />
+    );
+    const paginationPrevious = queryByTestId("pagination-previous");
+    expect(paginationPrevious).toBe(null);
+  });
+
+  it("should not display the next button if page equals totalPages - 1", () => {
+    const page = 4;
+    const totalPages = 5;
+    const setPage = jest.fn();
+    const { queryByTestId } = render(
+      <RecipeList.Pagination
+        page={page}
+        totalPages={totalPages}
+        setPage={setPage}
+      />
+    );
+    const paginationNext = queryByTestId("pagination-next");
+    expect(paginationNext).toBe(null);
   });
 });

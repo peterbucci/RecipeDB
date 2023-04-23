@@ -29,7 +29,11 @@ RecipeList.Pagination = ({ page, totalPages, setPage }) => {
   return (
     <View style={styles.pagination}>
       {page > 0 && (
-        <Text style={styles.paginationText} onPress={() => setPage(page - 1)}>
+        <Text
+          style={styles.paginationText}
+          onPress={() => setPage(page - 1)}
+          testID="pagination-previous"
+        >
           Previous
         </Text>
       )}
@@ -37,7 +41,11 @@ RecipeList.Pagination = ({ page, totalPages, setPage }) => {
         {page + 1} of {totalPages}
       </Text>
       {page < totalPages - 1 && (
-        <Text style={styles.paginationText} onPress={() => setPage(page + 1)}>
+        <Text
+          style={styles.paginationText}
+          onPress={() => setPage(page + 1)}
+          testID="pagination-next"
+        >
           Next
         </Text>
       )}
