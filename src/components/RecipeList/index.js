@@ -13,7 +13,10 @@ RecipeList.Item = ({ recipe, description, imageUri, handleRecipePress }) => {
       )}
       <View style={styles.itemRight}>
         <Text style={styles.text}>Recipes</Text>
-        <TouchableWithoutFeedback onPress={() => handleRecipePress(recipe.id)}>
+        <TouchableWithoutFeedback
+          onPress={() => handleRecipePress(recipe.id)}
+          testID="recipe-link"
+        >
           <Text style={styles.recipeName}>{recipe.name}</Text>
         </TouchableWithoutFeedback>
         <Text style={styles.text}>{description}...</Text>
