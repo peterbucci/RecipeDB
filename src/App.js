@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { registerRootComponent } from "expo";
 import { Text } from "react-native";
 import {
@@ -5,20 +6,18 @@ import {
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Provider } from "react-redux";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Constants from "expo-constants";
+import { useFonts } from "expo-font";
+
 import Home from "~/pages/Home";
 import Recipe from "~/pages/Recipe/";
-
-import { useFonts } from "expo-font";
 import AddARecipe from "./pages/AddARecipe";
 import Header from "./fragments/Header";
-import { useState } from "react";
 import Menu from "./fragments/Menu";
-import Constants from "expo-constants";
-
-import store from "./store";
-import { Provider } from "react-redux";
+import store from "./store/rootReducer";
 
 const Stack = createNativeStackNavigator();
 
@@ -61,9 +60,7 @@ function App() {
         >
           <Stack.Navigator
             initialRouteName="Home"
-            screenOptions={{
-              headerShown: false,
-            }}
+            screenOptions={{ headerShown: false }}
           >
             <Stack.Screen
               name="Home"

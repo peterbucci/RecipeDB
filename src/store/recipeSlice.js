@@ -10,6 +10,4 @@ export const recipesSlice = createSlice({
   },
 });
 
-export const { recipeAdded } = recipesSlice.actions;
-
-export default recipesSlice.reducer;
+export const { actions, reducer } = recipesSlice;

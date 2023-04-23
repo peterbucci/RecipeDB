@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ScrollViewWrapper from "../../fragments/ScrollWrapper";
 import { getRecipeCount, getRecipeList } from "../../api/recipe.api";
-import { recipeAdded } from "../Recipe/recipeSlice";
+import { recipesActions } from "../../store/";
 import RecipeList from "../../components/RecipeList";
+
+const { recipeAdded } = recipesActions;
 
 export default function Home({ navigation }) {
   const [recipeCount, setRecipeCount] = useState(null);
