@@ -1,5 +1,7 @@
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import { useSharedValue } from "react-native-reanimated";
+import { useDispatch, useSelector } from "react-redux";
+import { addARecipeActions } from "../../store/";
 import { addRecipe } from "../../api/recipe.api";
 import AddARecipeComponent from "../../components/AddARecipe";
 import ImagePickerComponent from "../../fragments/ImagePicker";
@@ -9,6 +11,8 @@ import Ingredients from "./Ingredients";
 import Notes from "./Notes";
 import Steps from "./Steps";
 
+const { updateImage, resetForm } = addARecipeActions;
+
 const sections = [
   "Basic Details",
   "Featured Image",
@@ -17,32 +21,11 @@ const sections = [
   "Notes",
 ];
 
-function reducer(state, action) {
-  const { type, ...restAction } = action;
-  switch (type) {
-    case "ADD_TO_ARRAY":
-      const { key, value } = restAction;
-      return { ...state, [key]: [...state[key], value] };
-    case "UPDATE_INPUT":
-      return { ...state, ...restAction };
-    case "RESET_FORM":
-      return { name: "", description: "" };
-    default:
-      return state;
-  }
-}
-
 export default function AddARecipe({ navigation }) {
   const enterDirection = useSharedValue(null);
   const [currentSection, setCurrentSection] = useState(0);
-  const [state, dispatch] = useReducer(reducer, {
-    name: "",
-    description: "",
-    image: null,
-    ingredients: [],
-    steps: [],
-    notes: [],
-  });
+  const dispatch = useDispatch();
+  const recipe = useSelector((state) => state.addARecipe);
 
   const headerButtonDisabled = (direction) => {
     return direction === "left"
@@ -56,16 +39,12 @@ export default function AddARecipe({ navigation }) {
   };
 
   const pickImage = (uri) => {
-    dispatch({ type: "UPDATE_INPUT", image: uri });
-  };
-
-  const addToArray = (key, value) => {
-    dispatch({ type: "ADD_TO_ARRAY", key, value });
+    dispatch(updateImage(uri));
   };
 
   const onSubmit = async () => {
     const res = await addRecipe({
-      ...state,
+      ...recipe,
       user_id: 1,
     });
     navigation.navigate("Recipe", {
@@ -73,7 +52,7 @@ export default function AddARecipe({ navigation }) {
     });
   };
 
-  const onClear = () => dispatch({ type: "RESET_FORM" });
+  const onClear = () => dispatch(resetForm());
 
   return (
     <ScrollViewWrapper navigation={navigation}>
@@ -87,16 +66,11 @@ export default function AddARecipe({ navigation }) {
           return currentSection === i ? (
             <AddARecipeComponent.Body enterDirection={enterDirection} key={i}>
               {i === 0 ? (
-                <BasicDetails dispatch={dispatch} state={state} />
+                <BasicDetails />
               ) : i === 1 ? (
                 <ImagePickerComponent onPick={pickImage} />
               ) : i === 2 ? (
-                <Ingredients
-                  ingredientsList={state.ingredients}
-                  addToRecipe={(ingredient) =>
-                    addToArray("ingredients", ingredient)
-                  }
-                />
+                <Ingredients />
               ) : i === 3 ? (
                 <Steps />
               ) : (

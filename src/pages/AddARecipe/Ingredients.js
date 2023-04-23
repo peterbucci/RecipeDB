@@ -1,47 +1,60 @@
 import { useState } from "react";
 import { Text, TouchableWithoutFeedback, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import TextInputComponent from "../../components/AddARecipe/Form";
+import { addARecipeActions } from "../../store/";
+const { addIngredient, updateIngredient } = addARecipeActions;
 
-export default function Ingredients({ ingredientsList, addToRecipe }) {
-  const [newIngredient, setNewIngredient] = useState(null);
+export default function Ingredients() {
+  const dispatch = useDispatch();
+  const ingredients = useSelector((state) => state.addARecipe.ingredients);
+  const [ingredientToEdit, setIngredientToEdit] = useState(-1);
+
   return (
     <>
-      {ingredientsList.map(({ amount, measurement, name }, i) => {
-        return <Text key={i}>{amount + " " + measurement + " " + name}</Text>;
-      })}
-      <View>
-        {newIngredient && (
+      {ingredients.map(({ amount, measurement, name }, i) => {
+        return i === ingredientToEdit ? (
           <>
             <TextInputComponent
               label="Amount"
               onChangeText={(val) =>
-                setNewIngredient((prev) => ({ ...prev, amount: val }))
+                dispatch(
+                  updateIngredient({ index: i, key: "amount", value: val })
+                )
               }
-              value={newIngredient.amount}
+              value={amount}
             />
             <TextInputComponent
               label="measurement"
               onChangeText={(val) =>
-                setNewIngredient((prev) => ({ ...prev, measurement: val }))
+                dispatch(
+                  updateIngredient({ index: i, key: "measurement", value: val })
+                )
               }
-              value={newIngredient.measurement}
+              value={measurement}
             />
             <TextInputComponent
               label="name"
               onChangeText={(val) =>
-                setNewIngredient((prev) => ({ ...prev, name: val }))
+                dispatch(
+                  updateIngredient({ index: i, key: "name", value: val })
+                )
               }
-              value={newIngredient.name}
+              value={name}
             />
           </>
-        )}
+        ) : (
+          <Text key={i}>{amount + " " + measurement + " " + name}</Text>
+        );
+      })}
+      <View>
         <TouchableWithoutFeedback
           onPress={() => {
-            if (newIngredient) addToRecipe(newIngredient);
-            setNewIngredient({ name: "", measurement: "", amount: "" });
+            dispatch(addIngredient());
+            setIngredientToEdit(ingredients.length);
           }}
         >
-          <Text>{newIngredient ? "Add" : "New Ingredient"}</Text>
+          <Text>{ingredientToEdit > -1 ? "Add" : "New Ingredient"}</Text>
         </TouchableWithoutFeedback>
       </View>
     </>

@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { recipesReducer } from ".";
+import { addARecipeReducer, recipesReducer } from ".";
 
 export default configureStore({
   reducer: {
     recipes: recipesReducer,
+    addARecipe: addARecipeReducer,
   },
 });
